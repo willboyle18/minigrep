@@ -2,6 +2,8 @@ use std::env;
 use std::fs;
 
 fn main() {
+    // Hello from my ThinkPad
+
     let args: Vec<String> = env::args().collect();
     // dbg!(&args);
     
