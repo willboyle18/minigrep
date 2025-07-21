@@ -7,6 +7,22 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+
+// Lifetime parameters specify which argument lifetime is connected to the lifetime of the return value.
+// The return value will contain string slices that reference slices of the argument contents.
+// The data returned by the search function will live as long as the data passed into the search function in the contents argument.
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+
 pub struct Config {
     pub query: String,
     pub file_path: String,
@@ -22,5 +38,21 @@ impl Config {
         let file_path = args[2].clone();
 
         Ok(Config { query, file_path})
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn one_result() {
+        let query = "duct";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.";
+
+        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
     }
 }
